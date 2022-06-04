@@ -2,6 +2,7 @@ package application;
 
 import java.io.IOException;
 
+import gui.MainViewController;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -13,6 +14,7 @@ public class Main extends Application {
 	public void start(Stage primaryStage) {
 		try {
 			FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/MainView.fxml"));
+			
 			ScrollPane scroll = loader.load();//Para aumentar a linha de scroll com os menus
 			
 			//Ajustando à janela
