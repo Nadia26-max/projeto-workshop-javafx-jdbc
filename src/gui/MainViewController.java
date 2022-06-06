@@ -15,6 +15,7 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.VBox;
+import model.services.DepartamentoService;
 
 public class MainViewController implements Initializable {
 
@@ -36,7 +37,7 @@ public class MainViewController implements Initializable {
 
 	@FXML
 	public void onMenuItemDepartamentoAction() {
-		carregaView("/gui/DepartamentoLista.fxml");
+		carregaView2("/gui/DepartamentoLista.fxml");//Atenção!
 	}
 
 	@FXML
@@ -70,6 +71,34 @@ public class MainViewController implements Initializable {
 			//Adicionando no mainVBox o mainMenu e os filhos do novoVBox
 			mainVBox.getChildren().add(mainMenu);
 			mainVBox.getChildren().addAll(novoVBox.getChildren());
+		}
+		catch (IOException e) {
+			Alertas.showAlert("IoException", "Erro ao carregar a página", e.getMessage(), AlertType.ERROR);
+		}
+	}
+	
+	private synchronized void carregaView2(String absolutoNome) {//Caminho completo (pasta até o arquivo)
+		try {
+			FXMLLoader loader = new FXMLLoader(getClass().getResource(absolutoNome));
+		
+			VBox novoVBox = loader.load();
+			
+			Scene mainScene = Main.getMainScene();
+			
+			VBox mainVBox = (VBox) ((ScrollPane) mainScene.getRoot()).getContent();//Pega o primeiro elemento da minha view (ScrollPane), seguindo elemento content
+			
+			Node mainMenu = mainVBox.getChildren().get(0);//Primeiro filho na posição zero
+			
+			mainVBox.getChildren().clear();//Limpando todos os filhos do mainVBox
+			
+			mainVBox.getChildren().add(mainMenu);
+			mainVBox.getChildren().addAll(novoVBox.getChildren());
+			
+			DepartamentoListaController controller = loader.getController();//Acessando o controller (se precisar, tambem poderei carregar a view 
+		
+			//Injetando dependencia no DepartamentoController
+			controller.setDepartamentoService(new DepartamentoService());
+			controller.atualizaTableView();//ja posso atualizar os dados na tela 
 		}
 		catch (IOException e) {
 			Alertas.showAlert("IoException", "Erro ao carregar a página", e.getMessage(), AlertType.ERROR);
