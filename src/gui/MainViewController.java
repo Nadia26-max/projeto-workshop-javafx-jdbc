@@ -39,4 +39,17 @@ public class MainViewController implements Initializable{
 	public void initialize(URL uri, ResourceBundle rb) {
 		
 	}
+	/*
+	private void carregaView(String absoluteNome) {//Caminho completo (pasta até o arquivo)
+		FXMLLoader loader = new FXMLLoader()(getClass().getResource(absolutoNome));
+		
+		try {
+		VBox novoVBox = new loader.load();
+		
+		
+		}
+		catch (IOException e) {
+			Alertas.showAlert("IoException", "Erro ao carregar a página", e.getMessage(), AlertType.ERROR);
+		}
+	}*/
 }
