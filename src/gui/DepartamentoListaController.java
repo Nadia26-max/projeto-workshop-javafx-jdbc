@@ -46,7 +46,8 @@ public class DepartamentoListaController implements Initializable {
 	// Tratamento de eventos do clique do botao
 	public void onBtNovoAction(ActionEvent evento) {//Referencia para o controle que recebeu o evento. E a partir desse evento, posso acessar o Stage
 		Stage parentStage = Uteis.currentStage(evento);
-		criaFormDialogo("/gui/DepartamentoForm.fxml", parentStage);//Aí é criada a janela de formulario
+		Departamento obj = new Departamento();//Iniciou vazio pois é o botao de novo
+		criaFormDialogo(obj,"/gui/DepartamentoForm.fxml", parentStage);//Aí é criada a janela de formulario
 	}
 
 	// Setando dependência (classe de serviço) pelo método
@@ -91,10 +92,15 @@ public class DepartamentoListaController implements Initializable {
 		tableViewDepartamento.setItems(obsList);// Mostrando, na tela, os dados instanciados na obsList
 	}
 
-		private void criaFormDialogo(String absolutoNome, Stage parentStage) {//Informando quem criou essa janela de dialogo
+		private void criaFormDialogo(Departamento obj,String absolutoNome, Stage parentStage) {//Informando quem criou essa janela de dialogo
 			try {
 				FXMLLoader loader = new FXMLLoader(getClass().getResource(absolutoNome));
 				Pane painel = loader.load();
+				
+				//Referência para a tela de formulario no Controller
+				DepartamentoFormController dfc = loader.getController();
+				dfc.setDepartamento(obj);
+				dfc.atualizaFormDados();
 				
 				//Janela do formulario para preencher um novo Departamento
 				//Colocando outro Stage - Um palco na frente de outro
