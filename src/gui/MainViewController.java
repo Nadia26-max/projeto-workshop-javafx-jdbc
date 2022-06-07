@@ -3,7 +3,7 @@ package gui;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
-
+import java.util.function.Consumer;
 import application.Main;
 import gui.util.Alertas;
 import javafx.fxml.FXML;
@@ -37,20 +37,25 @@ public class MainViewController implements Initializable {
 
 	@FXML
 	public void onMenuItemDepartamentoAction() {
-		carregaView2("/gui/DepartamentoLista.fxml");//Atenção!
+		carregaView("/gui/DepartamentoLista.fxml",(DepartamentoListaController controller) -> {
+			
+			//Injetando dependencia no DepartamentoController
+			controller.setDepartamentoService(new DepartamentoService());
+			controller.atualizaTableView();//ja posso atualizar os dados na tela 
+		});
 	}
 
 	@FXML
 	public void onMenuItemItemSobreAction() {
-		carregaView("/gui/Sobre.fxml");
+		carregaView("/gui/Sobre.fxml", x -> {});//Não tem nada para fazer, entao as chaves sao vazias
 	}
 
 	@Override
 	public void initialize(URL uri, ResourceBundle rb) {
 
 	}
-
-	private synchronized void carregaView(String absolutoNome) {//Caminho completo (pasta até o arquivo)
+				//Funçao carrega view do tipo T
+	private synchronized <T> void carregaView(String absolutoNome,Consumer<T> inicializandoAcao) {//Caminho completo (pasta até o arquivo)
 		try {
 			FXMLLoader loader = new FXMLLoader(getClass().getResource(absolutoNome));
 		
@@ -71,12 +76,18 @@ public class MainViewController implements Initializable {
 			//Adicionando no mainVBox o mainMenu e os filhos do novoVBox
 			mainVBox.getChildren().add(mainMenu);
 			mainVBox.getChildren().addAll(novoVBox.getChildren());
+			
+			//Ativando função que passar em Consumer<T> inicializandoAcao
+			T controller =  loader.getController();//O controlador vai retornar o controle do tipo que eu chamar no metodo onMenuItemDepartamentoAction
+		
+			//Chamando a função inicializandoAcao
+			inicializandoAcao.accept(controller);//Executará o que será passado na função onMenuItemDepartamentoAction
 		}
 		catch (IOException e) {
 			Alertas.showAlert("IoException", "Erro ao carregar a página", e.getMessage(), AlertType.ERROR);
 		}
 	}
-	
+	/*
 	private synchronized void carregaView2(String absolutoNome) {//Caminho completo (pasta até o arquivo)
 		try {
 			FXMLLoader loader = new FXMLLoader(getClass().getResource(absolutoNome));
@@ -103,5 +114,5 @@ public class MainViewController implements Initializable {
 		catch (IOException e) {
 			Alertas.showAlert("IoException", "Erro ao carregar a página", e.getMessage(), AlertType.ERROR);
 		}
-	}
+	}*/
 }
