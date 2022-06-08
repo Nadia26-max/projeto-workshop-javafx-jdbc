@@ -3,18 +3,27 @@ package gui;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import db.DbExcecao;
+import gui.util.Alertas;
 import gui.util.Constraints;
+import gui.util.Uteis;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import model.entities.Departamento;
+import model.services.DepartamentoService;
 
 public class DepartamentoFormController implements Initializable{
 
 	//Iniciando a população dos formularios
 	private Departamento entidade;
+	
+	//Dependência
+	private DepartamentoService servico;
 	
 	@FXML
 	private TextField txtId;
@@ -37,14 +46,46 @@ public class DepartamentoFormController implements Initializable{
 		this.entidade = entidade;
 	}	
 	
+	public void setDepartamentoService(DepartamentoService servico) {
+		this.servico = servico;
+	}	
+	
 	@FXML
-	public void onBtSalvarAction() {
-		System.out.println("Testando onBtSalvarAction");
+	public void onBtSalvarAction(ActionEvent evento) {//Salvando departamento no bd
+		
+		//Caso a dependencia nao seja injetada
+		if(entidade == null) {
+			throw new IllegalStateException("O objeto entidade está nulo");
+		}
+		
+		//Caso a dependencia nao seja injetada
+		if(servico == null) {
+			throw new IllegalStateException("O objeto serviço está nulo");
+		}
+		
+		try {
+		//Pega os dados que estao na caixinha do formulario e instanciar um departamento
+		entidade = getFormDado();//Pego os dados e jogo na variavel entidade
+		servico.salvaOrAtualiza(entidade);
+		Uteis.currentStage(evento).close();//Pega a referencia da janela e depois fecha
+		}
+		catch (DbExcecao e) {
+			Alertas.showAlert("Erro ao salvar o objeto", null, e.getMessage(), AlertType.ERROR);
+		}
+	}
+	
+	private Departamento getFormDado() {
+		Departamento obj = new Departamento();
+		
+		obj.setId(Uteis.tryParseToInt(txtId.getText()));//Se o que tiver aqui nao for numero inteiro, será nulo
+		obj.setNome(txtNome.getText());
+		
+		return obj;
 	}
 	
 	@FXML
-	public void onBtCancelarAction() {
-		System.out.println("Testando onBtCancelarAction");
+	public void onBtCancelarAction(ActionEvent evento) {
+		Uteis.currentStage(evento).close();//Pega a referencia da janela e depois fecha
 	}
 	
 	@Override

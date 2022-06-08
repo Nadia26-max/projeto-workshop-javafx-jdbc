@@ -8,7 +8,15 @@ public class Uteis {
 
 	//Acesso o Stage onde o controle que recebeu o evento está (Clicando no botao e pegando o evento daquele botao
 	public static Stage currentStage(ActionEvent evento) {//currentStage -> palco atual
-		
 		return (Stage) ((Node) evento.getSource()).getScene().getWindow();//Stage é superclasse e precisar estar declarada
+	}
+	
+	public static Integer tryParseToInt(String str) {//Convertendo o valor da caixinha para inteiro
+		try {
+			return Integer.parseInt(str);
+		}
+		catch (NumberFormatException e) {//Na hora da conversao
+			return null;
+		}
 	}
 }

@@ -100,6 +100,7 @@ public class DepartamentoListaController implements Initializable {
 				//Referência para a tela de formulario no Controller
 				DepartamentoFormController dfc = loader.getController();
 				dfc.setDepartamento(obj);
+				dfc.setDepartamentoService(new DepartamentoService());//Injeção de depencia para funcionar o servico de salvar os dados no bd com o botao
 				dfc.atualizaFormDados();
 				
 				//Janela do formulario para preencher um novo Departamento

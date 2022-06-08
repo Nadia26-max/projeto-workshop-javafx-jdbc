@@ -12,4 +12,13 @@ public class DepartamentoService {
 	public List<Departamento> findAll(){//Adicionando dados via bd
 		return dao.findAll();
 	}
+	
+	public void salvaOrAtualiza(Departamento obj) {//Insere um dado no bd ou atualiza
+		if(obj.getId() == null) {//Insere novo departamento
+			dao.insert(obj);
+		}
+		else {
+			dao.update(obj);//Atualiza o departamento existente
+		}
+	}
 }
