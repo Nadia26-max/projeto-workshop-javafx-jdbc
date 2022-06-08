@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 import java.util.function.Consumer;
+
 import application.Main;
 import gui.util.Alertas;
 import javafx.fxml.FXML;
@@ -16,6 +17,7 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.VBox;
 import model.services.DepartamentoService;
+import model.services.VendedorService;
 
 public class MainViewController implements Initializable {
 
@@ -32,16 +34,19 @@ public class MainViewController implements Initializable {
 	// Eventos
 	@FXML
 	public void onMenuItemVendedorAction() {
-		System.out.println("Menu de Vendedor");
-	}
+		carregaView("/gui/VendedorLista.fxml",(VendedorListaController controller) -> {
+			
+		controller.setVendedorService(new VendedorService());
+		controller.atualizaTableView();//ja posso atualizar os dados na tela 
+		});	}
 
 	@FXML
 	public void onMenuItemDepartamentoAction() {
 		carregaView("/gui/DepartamentoLista.fxml",(DepartamentoListaController controller) -> {
 			
-			//Injetando dependencia no DepartamentoController
-			controller.setDepartamentoService(new DepartamentoService());
-			controller.atualizaTableView();//ja posso atualizar os dados na tela 
+		//Injetando dependencia no DepartamentoController
+		controller.setDepartamentoService(new DepartamentoService());
+		controller.atualizaTableView();//ja posso atualizar os dados na tela 
 		});
 	}
 

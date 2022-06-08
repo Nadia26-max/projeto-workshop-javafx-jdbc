@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.ToolBar?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<VBox prefHeight="348.0" prefWidth="488.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.VendedorListaController">
+   <children>
+      <Label prefHeight="42.0" prefWidth="208.0" text=" Vendedor - Cadastro">
+         <font>
+            <Font name="System Bold" size="12.0" />
+         </font>
+         <padding>
+            <Insets left="5.0" top="5.0" />
+         </padding>
+      </Label>
+      <ToolBar prefHeight="40.0" prefWidth="200.0">
+        <items>
+          <Button fx:id="btNovo" mnemonicParsing="false" onAction="#onBtNovoAction" prefHeight="25.0" prefWidth="49.0" text="Novo" />
+        </items>
+      </ToolBar>
+      <TableView fx:id="tableViewVendedor" prefHeight="200.0" prefWidth="328.0">
+        <columns>
+          <TableColumn fx:id="tableColunaId" prefWidth="62.0" text="Id" />
+          <TableColumn fx:id="tableColunaNome" prefWidth="198.0" text="Nome" />
+            <TableColumn fx:id="tableColunaEDIT" prefWidth="111.0" />
+            <TableColumn fx:id="tableColunaREMOVE" prefWidth="95.0" />
+        </columns>
+      </TableView>
+   </children>
+</VBox>
