@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox prefHeight="255.0" prefWidth="208.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.DepartamentoListaController">
+<VBox prefHeight="332.0" prefWidth="360.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.DepartamentoListaController">
    <children>
       <Label prefHeight="42.0" prefWidth="208.0" text=" Departamento - Cadastro">
          <font>
@@ -24,10 +24,11 @@
           <Button fx:id="btNovo" mnemonicParsing="false" onAction="#onBtNovoAction" prefHeight="25.0" prefWidth="49.0" text="Novo" />
         </items>
       </ToolBar>
-      <TableView fx:id="tableViewDepartamento" prefHeight="200.0" prefWidth="200.0">
+      <TableView fx:id="tableViewDepartamento" prefHeight="200.0" prefWidth="328.0">
         <columns>
-          <TableColumn fx:id="tableColunaId" prefWidth="75.0" text="Id" />
-          <TableColumn fx:id="tableColunaNome" prefWidth="75.0" text="Nome" />
+          <TableColumn fx:id="tableColunaId" prefWidth="50.0" text="Id" />
+          <TableColumn fx:id="tableColunaNome" prefWidth="210.0" text="Nome" />
+            <TableColumn fx:id="tableColunaEDIT" prefWidth="100.0" />
         </columns>
       </TableView>
    </children>
