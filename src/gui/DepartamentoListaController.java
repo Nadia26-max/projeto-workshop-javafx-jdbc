@@ -3,8 +3,14 @@ package gui;
 import java.io.IOException;
 import java.net.URL;
 import java.util.List;
+import java.util.Optional;
 import java.util.ResourceBundle;
+
+import com.mysql.cj.x.protobuf.MysqlxCursor.Open;
+
 import application.Main;
+import db.DBIntegridadeExcecao;
+import db.DbExcecao;
 import gui.listeners.DadoChangeListener;
 import gui.util.Alertas;
 import gui.util.Uteis;
@@ -16,8 +22,10 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -38,11 +46,15 @@ public class DepartamentoListaController implements Initializable, DadoChangeLis
 
 	@FXML
 	private TableColumn<Departamento, Integer> tableColunaId;// Referencia o Id
+
 	@FXML
 	private TableColumn<Departamento, String> tableColunaNome;// Referencia o Nome
 
 	@FXML
 	private TableColumn<Departamento, Departamento> tableColunaEDIT;
+
+	@FXML
+	private TableColumn<Departamento, Departamento> tableColunaREMOVE;
 
 	@FXML
 	private Button btNovo;
@@ -76,7 +88,7 @@ public class DepartamentoListaController implements Initializable, DadoChangeLis
 
 		Stage stage = (Stage) Main.getMainScene().getWindow();// Referencia para a janela com o Stage em partentes pois
 																// o Main é superclasse
-		
+
 		// Deixar a parte debaixo na subjanela de Departamento acompanhando a parte
 		// inferior da tela
 		tableViewDepartamento.prefHeightProperty().bind(stage.heightProperty());
@@ -97,8 +109,11 @@ public class DepartamentoListaController implements Initializable, DadoChangeLis
 		// Carregando a lista dentro do ObservableList
 		obsList = FXCollections.observableArrayList(lista);// Instancia o obsList da lista
 		tableViewDepartamento.setItems(obsList);// Mostrando, na tela, os dados instanciados na obsList
+
+		//Chama os metodos
+		iniciaEdicaoButtons();// Acrescenta um botao de edição em cada linha da tabela e vai abrir o formulario de edição usando o criaFormDialogo
+		iniciaRemoveButtons();
 	
-		iniciaEdicaoButtons();//Acrescenta um botao de edição em cada linha da tabela e vai abrir o formulario de edição usando o criaFormDialogo
 	}
 
 	private void criaFormDialogo(Departamento obj, String absolutoNome, Stage parentStage) {// Informando quem criou
@@ -139,7 +154,7 @@ public class DepartamentoListaController implements Initializable, DadoChangeLis
 	private void iniciaEdicaoButtons() {
 		tableColunaEDIT.setCellValueFactory(param -> new ReadOnlyObjectWrapper<>(param.getValue()));
 		tableColunaEDIT.setCellFactory(param -> new TableCell<Departamento, Departamento>() {
-			
+
 			private final Button button = new Button("editar");
 
 			@Override
@@ -151,9 +166,45 @@ public class DepartamentoListaController implements Initializable, DadoChangeLis
 				}
 				setGraphic(button);
 				button.setOnAction(
-						event -> criaFormDialogo (obj, "/gui/DepartamentoForm.fxml", Uteis.currentStage(event)));
+						event -> criaFormDialogo(obj, "/gui/DepartamentoForm.fxml", Uteis.currentStage(event)));
 			}
 		});
 	}
 
+	private void iniciaRemoveButtons() {
+		tableColunaREMOVE.setCellValueFactory(param -> new ReadOnlyObjectWrapper<>(param.getValue()));
+		tableColunaREMOVE.setCellFactory(param -> new TableCell<Departamento, Departamento>() {
+			private final Button button = new Button("excluir");
+
+			@Override
+			protected void updateItem(Departamento obj, boolean empty) {
+				super.updateItem(obj, empty);
+				if (obj == null) {
+					setGraphic(null);
+					return;
+				}
+				setGraphic(button);
+				button.setOnAction(event -> removeEntidade(obj));
+			}
+
+		});
+	}
+
+	private void removeEntidade(Departamento obj) {
+		Optional<ButtonType> resultado = Alertas.showConfirmation("Confirmação", "Tem certeza que deseja excluir?");
+	
+		//get - funciona para acessar o objeto que está dentro do get
+		if(resultado.get() == ButtonType.OK) {//Ok confirma a exclusao
+			if(depservice ==  null) {
+				throw new IllegalStateException("O objeto serviço está nulo");//Pois pode gerar uma exceção
+			}
+			try {
+			depservice.remove(obj);
+			atualizaTableView();
+			}
+			catch (DBIntegridadeExcecao e) {
+				Alertas.showAlert("Erro ao excluir o objeto", null, e.getMessage(), AlertType.ERROR);
+			}
+		}
+	}
 }
