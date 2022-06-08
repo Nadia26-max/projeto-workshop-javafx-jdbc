@@ -1,9 +1,11 @@
 package gui;
 
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
-
 import db.DbExcecao;
+import gui.listeners.DadoChangeListener;
 import gui.util.Alertas;
 import gui.util.Constraints;
 import gui.util.Uteis;
@@ -24,6 +26,8 @@ public class DepartamentoFormController implements Initializable{
 	
 	//Dependência
 	private DepartamentoService servico;
+	
+	private List<DadoChangeListener> dadoCListener =  new ArrayList<>();
 	
 	@FXML
 	private TextField txtId;
@@ -50,6 +54,11 @@ public class DepartamentoFormController implements Initializable{
 		this.servico = servico;
 	}	
 	
+	//Vai escrever/adicionar esse listener na lista
+	public void subscribeDadoChangeListener(DadoChangeListener listener) {
+		dadoCListener.add(listener);
+	}
+	
 	@FXML
 	public void onBtSalvarAction(ActionEvent evento) {//Salvando departamento no bd
 		
@@ -64,16 +73,23 @@ public class DepartamentoFormController implements Initializable{
 		}
 		
 		try {
-		//Pega os dados que estao na caixinha do formulario e instanciar um departamento
-		entidade = getFormDado();//Pego os dados e jogo na variavel entidade
-		servico.salvaOrAtualiza(entidade);
-		Uteis.currentStage(evento).close();//Pega a referencia da janela e depois fecha
+			//Pega os dados que estao na caixinha do formulario e instanciar um departamento
+			entidade = getFormDado();//Pego os dados e jogo na variavel entidade
+			servico.salvaOrAtualiza(entidade);
+			Uteis.currentStage(evento).close();//Pega a referencia da janela e depois fecha
+			notificaDadoChangeListeners();
 		}
 		catch (DbExcecao e) {
 			Alertas.showAlert("Erro ao salvar o objeto", null, e.getMessage(), AlertType.ERROR);
 		}
 	}
 	
+	private void notificaDadoChangeListeners() {
+		for(DadoChangeListener listener: dadoCListener) {
+			listener.onDataChanged();
+		}
+	}
+
 	private Departamento getFormDado() {
 		Departamento obj = new Departamento();
 		

@@ -4,7 +4,9 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
+
 import application.Main;
+import gui.listeners.DadoChangeListener;
 import gui.util.Alertas;
 import gui.util.Uteis;
 import javafx.collections.FXCollections;
@@ -22,10 +24,10 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.Pane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import model.services.DepartamentoService;
 import model.entities.Departamento;
+import model.services.DepartamentoService;
 
-public class DepartamentoListaController implements Initializable {
+public class DepartamentoListaController implements Initializable,DadoChangeListener {
 
 	// Fazendo referencia/injeção de dependência à classe de serviço
 	private DepartamentoService depservice;// Não precisa forçar o new DepartamentoService, crio um método
@@ -101,6 +103,7 @@ public class DepartamentoListaController implements Initializable {
 				DepartamentoFormController dfc = loader.getController();
 				dfc.setDepartamento(obj);
 				dfc.setDepartamentoService(new DepartamentoService());//Injeção de depencia para funcionar o servico de salvar os dados no bd com o botao
+				dfc.subscribeDadoChangeListener(this);//executa o objeto do DepartamentoListController, dispara o evento e executa o metodo onDataChanged
 				dfc.atualizaFormDados();
 				
 				//Janela do formulario para preencher um novo Departamento
@@ -116,5 +119,10 @@ public class DepartamentoListaController implements Initializable {
 			catch (IOException e) {
 				Alertas.showAlert("IOException", "Erro ao carregar a view", e.getMessage(), AlertType.ERROR);
 			}
+		}
+
+		@Override
+		public void onDataChanged() {
+			atualizaTableView();//Chama o metodo que atualiza
 		}
 }
