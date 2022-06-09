@@ -30,6 +30,15 @@ public class Uteis {
 			return null;
 		}
 	}
+	
+	//Conversao do salario. Mostro double e se nao funcionar, nulo
+	public static Double tryParseToDouble(String str) {// Convertendo o valor da caixinha para inteiro
+		try {
+			return Double.parseDouble(str);
+		} catch (NumberFormatException e) {// Na hora da conversao
+			return null;
+		}
+	}
 
 	// Formatando data
 	public static <T> void formatTableColumnDate(TableColumn<T, Date> tableColumn, String format) {

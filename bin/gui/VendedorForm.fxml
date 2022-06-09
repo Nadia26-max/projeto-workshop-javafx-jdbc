@@ -35,6 +35,10 @@
 				<Label fx:id="labelErroNome" prefHeight="17.0" prefWidth="203.0" textFill="RED" GridPane.columnIndex="2" GridPane.rowIndex="1" />
 				<TextField fx:id="txtId" editable="false" prefWidth="175.0" GridPane.columnIndex="1" />
 				<TextField fx:id="txtNome" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+            <TextField fx:id="txtEmail" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+            <DatePicker fx:id="dpNascimento" prefHeight="26.0" prefWidth="230.0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+            <TextField fx:id="txtBaseSalario" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+            <ComboBox fx:id="comboBoxDepartamento" prefHeight="21.0" prefWidth="226.0" GridPane.columnIndex="1" GridPane.rowIndex="5" />
       				<HBox prefHeight="32.0" prefWidth="149.0" spacing="5.0" GridPane.columnIndex="1" GridPane.rowIndex="6">
       					<children>
       						<Button fx:id="btSalvar" mnemonicParsing="false" onAction="#onBtSalvarAction" text="Salvar" />
@@ -46,13 +50,9 @@
             <Label text="Salário Base" GridPane.rowIndex="4" />
             <Label text="Departamento" GridPane.rowIndex="5" />
             <TextField GridPane.columnIndex="1" GridPane.rowIndex="2" />
-            <TextField fx:id="txtEmail" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-            <TextField fx:id="txtBaseSalario" GridPane.columnIndex="1" GridPane.rowIndex="4" />
-            <DatePicker fx:id="dpNascimento" prefHeight="26.0" prefWidth="230.0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
             <Label fx:id="labelErroEmail" textFill="#f50707" GridPane.columnIndex="2" GridPane.rowIndex="2" />
             <Label fx:id="labelErroNascimento" textFill="#f80606" GridPane.columnIndex="2" GridPane.rowIndex="3" />
             <Label fx:id="labelErroBaseSalario" textFill="#f50808" GridPane.columnIndex="2" GridPane.rowIndex="4" />
-            <ComboBox fx:id="comboBoxDepartamento" prefHeight="21.0" prefWidth="226.0" GridPane.columnIndex="1" GridPane.rowIndex="5" />
 			</children>
 		</GridPane>
 	</children>

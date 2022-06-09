@@ -1,9 +1,11 @@
 package gui;
 
 import java.net.URL;
+import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -135,24 +137,46 @@ public class VendedorFormController implements Initializable {
 		}
 	}
 
-	private Vendedor getFormDado() {
+	private Vendedor getFormDado() {// Pega os dados que foram carregados no formulario e carregam os dados com este
+									// objeto
 		Vendedor obj = new Vendedor();
 
 		ValidacaoExcecao excecao = new ValidacaoExcecao("Erro de validação");
 
 		obj.setId(Uteis.tryParseToInt(txtId.getText()));// Se o que tiver aqui nao for numero inteiro, será nulo
-
+		/*------------------------------------------------------------*/
 		if (txtNome.getText() == null || txtNome.getText().trim().equals("")) {// Se o nome for nulo ou o espaço vazio
 																				// for igual ao string vazio, significa
 																				// que a caixinha está vazia
 			excecao.addErro("nome", "O campo não pode ser vazio");
 		}
 		obj.setNome(txtNome.getText());
-
+		/*------------------------------------------------------------*/
+		if (txtEmail.getText() == null || txtEmail.getText().trim().equals("")) {
+			excecao.addErro("email", "O campo não pode ser vazio");
+		}
+		obj.setEmail(txtEmail.getText());
+		/*------------------------------------------------------------*/
+		if(dpNascimento.getValue() == null) {
+			excecao.addErro("nascimento", "O campo não pode ser vazio");
+		}
+		else {
+		//Converte a data da maquina de usuario, para o Instant(do tipo DatePicker) - independente da localidade
+		Instant instante = Instant.from(dpNascimento.getValue().atStartOfDay(ZoneId.systemDefault()));
+		obj.setNascimento(Date.from(instante));//Espera um Date, entao é preciso escrever dessa forma
+		}
+		/*------------------------------------------------------------*/
+		if (txtBaseSalario.getText() == null || txtBaseSalario.getText().trim().equals("")) {
+			excecao.addErro("baseSalario", "O campo não pode ser vazio");
+		}
+		obj.setBaseSalario(Uteis.tryParseToDouble(txtBaseSalario.getText()));
+		/*------------------------------------------------------------*/
+		obj.setDepartament(comboBoxDepartamento.getValue());
+		/*------------------------------------------------------------*/
+		
 		if (excecao.getErros().size() > 0) {// Se tem pelo menos um erro, lanço a exceção
 			throw excecao;
 		}
-
 		return obj;
 	}
 
@@ -191,8 +215,7 @@ public class VendedorFormController implements Initializable {
 		if (entidade.getNascimento() != null) {
 			// Criando uma data local
 			dpNascimento.setValue(LocalDate.ofInstant(entidade.getNascimento().toInstant(), ZoneId.systemDefault()));// Pega
-																														// //
-																														// usuario
+																													// usuario
 		}
 
 		Locale.setDefault(Locale.UK);
@@ -200,9 +223,9 @@ public class VendedorFormController implements Initializable {
 
 		if (entidade.getDepartament() == null) {// Para novo departamento
 			comboBoxDepartamento.getSelectionModel().selectFirst();// Pegando o primeiro elemento do combobox
-		} 
-		else {//Se ja tiver departamento
-			comboBoxDepartamento.setValue(entidade.getDepartament());// O departamento que estiver associado ao vendedor															// irá para o combobox (se nao for nulo)
+		} else {// Se ja tiver departamento
+			comboBoxDepartamento.setValue(entidade.getDepartament());// O departamento que estiver associado ao vendedor
+																		// // irá para o combobox (se nao for nulo)
 		}
 	}
 
@@ -220,9 +243,22 @@ public class VendedorFormController implements Initializable {
 																// texto
 		Set<String> fields = erros.keySet();// A partir dos nomes dos campos, percorro o conjunto
 
+		//Sem operador ternario (se somente assim, implementa todos os campos desta forma
 		if (fields.contains("nome")) {// Se nesse conjunto existe a chave nome
 			labelErroNome.setText(erros.get("nome"));// Pega a mensagem no campo nome e seta no label
 		}
+		else {
+			labelErroNome.setText("");//Se colocou dado, apaga a mensagem de erro
+		}
+		
+		//Com operador ternario
+		labelErroEmail.setText((fields.contains("email")? erros.get("email"): ""));
+		
+		//Com operador ternario
+		labelErroNascimento.setText((fields.contains("nascimento")? erros.get("nascimento"): ""));
+				
+		//Com operador ternario
+		labelErroBaseSalario.setText((fields.contains("baseSalario")? erros.get("baseSalario"): ""));
 	}
 
 	private void inicializandoComboBoxDepartamento() {
