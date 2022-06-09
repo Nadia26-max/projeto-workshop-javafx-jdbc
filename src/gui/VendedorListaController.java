@@ -31,6 +31,7 @@ import javafx.scene.layout.Pane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import model.entities.Vendedor;
+import model.services.DepartamentoService;
 import model.services.VendedorService;
 
 public class VendedorListaController implements Initializable, DadoChangeListener {
@@ -136,8 +137,9 @@ public class VendedorListaController implements Initializable, DadoChangeListene
 			// Referência para a tela de formulario no Controller
 			VendedorFormController dfc = loader.getController();
 			dfc.setVendedor(obj);
-			dfc.setVendedorService(new VendedorService());// Injeção de depencia para funcionar o servico de
+			dfc.setServices(new VendedorService(), new DepartamentoService());// Injeção de depencia para funcionar o servico de
 																	// salvar os dados no bd com o botao
+			dfc.carregandoObjetosAssociados();//Carrega os departamentos no bd e deixa no controller
 			dfc.subscribeDadoChangeListener(this);// executa o objeto do VendedorListController, dispara o evento e
 													// executa o metodo onDataChanged
 			dfc.atualizaFormDados();
@@ -152,7 +154,9 @@ public class VendedorListaController implements Initializable, DadoChangeListene
 			dialogoStage.initModality(Modality.WINDOW_MODAL);// Se a janela será modal ou terá outro comportamento -
 																// Modal (tem que fechar esta para acessar a anterior)
 			dialogoStage.showAndWait();
-		} catch (IOException e) {
+		} 
+		catch (IOException e) {
+			e.printStackTrace();//Mostrar as mensagens de erro que possam aparecer
 			Alertas.showAlert("IOException", "Erro ao carregar a view", e.getMessage(), AlertType.ERROR);
 		}
 	}

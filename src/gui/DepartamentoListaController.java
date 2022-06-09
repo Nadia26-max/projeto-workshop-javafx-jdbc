@@ -137,7 +137,9 @@ public class DepartamentoListaController implements Initializable, DadoChangeLis
 			dialogoStage.initModality(Modality.WINDOW_MODAL);// Se a janela será modal ou terá outro comportamento -
 																// Modal (tem que fechar esta para acessar a anterior)
 			dialogoStage.showAndWait();
-		} catch (IOException e) {
+		} 
+		catch (IOException e) {
+			e.printStackTrace();//Mostrar as mensagens de erro que possam aparecer
 			Alertas.showAlert("IOException", "Erro ao carregar a view", e.getMessage(), AlertType.ERROR);
 		}
 	}
