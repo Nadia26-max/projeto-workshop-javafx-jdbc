@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import db.DB;
 import db.DbExcecao;
 import model.dao.VendedorDao;
@@ -34,7 +35,7 @@ public class VendedorDaoJDBC implements VendedorDao {
 
 			st.setString(1, ven.getNome());
 			st.setString(2, ven.getEmail());
-			st.setDate(3, new java.sql.Date(ven.getAniversario().getTime()));
+			st.setDate(3, new java.sql.Date(ven.getNascimento().getTime()));
 			st.setDouble(4, ven.getBaseSalario());
 			st.setInt(5, ven.getDepartament().getId());
 
@@ -69,7 +70,7 @@ public class VendedorDaoJDBC implements VendedorDao {
 
 			st.setString(1, ven.getNome());
 			st.setString(2, ven.getEmail());
-			st.setDate(3, new java.sql.Date(ven.getAniversario().getTime()));
+			st.setDate(3, new java.sql.Date(ven.getNascimento().getTime()));
 			st.setDouble(4, ven.getBaseSalario());
 			st.setInt(5, ven.getDepartament().getId());
 			st.setInt(6, ven.getId());// id do vendedor - Por causa do where no upadate
@@ -153,7 +154,7 @@ public class VendedorDaoJDBC implements VendedorDao {
 		ven.setId(rs.getInt("Id"));// Nome da coluna no bd
 		ven.setNome(rs.getString("Name"));
 		ven.setEmail(rs.getString("Email"));
-		ven.setAniversario(rs.getDate("BirthDate"));
+		ven.setNascimento(rs.getDate("BirthDate"));
 		ven.setBaseSalario(rs.getDouble("BaseSalary"));
 		ven.setDepartament(dep);// Referenciando o Departmamento
 		return ven;

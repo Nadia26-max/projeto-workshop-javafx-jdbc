@@ -1,6 +1,7 @@
 package gui;
 
 import java.net.URL;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
@@ -42,6 +43,15 @@ public class VendedorListaController implements Initializable, DadoChangeListene
 	private TableColumn<Vendedor, String> tableColunaNome;// Referencia o Nome
 
 	@FXML
+	private TableColumn<Vendedor, String> tableColunaEmail;// Referencia o Nome
+	
+	@FXML
+	private TableColumn<Vendedor, Date> tableColunaDataNascimento;// Referencia o Nome
+	
+	@FXML
+	private TableColumn<Vendedor, Double> tableColunaBaseSalario;// Referencia o Nome
+	
+	@FXML
 	private TableColumn<Vendedor, Vendedor> tableColunaEDIT;
 
 	@FXML
@@ -75,11 +85,17 @@ public class VendedorListaController implements Initializable, DadoChangeListene
 
 		// Iniciando o comportamento das colunas - Padrao
 		tableColunaId.setCellValueFactory(new PropertyValueFactory<>("id"));
-		tableColunaNome.setCellValueFactory(new PropertyValueFactory<>("Nome"));
-
+		tableColunaNome.setCellValueFactory(new PropertyValueFactory<>("nome"));
+		tableColunaEmail.setCellValueFactory(new PropertyValueFactory<>("email"));
+		
+		tableColunaDataNascimento.setCellValueFactory(new PropertyValueFactory<>("nascimento"));
+		Uteis.formatTableColumnDate(tableColunaDataNascimento,"dd/MM/yyyy");
+		
+		tableColunaBaseSalario.setCellValueFactory(new PropertyValueFactory<>("baseSalario"));
+		Uteis.formatTableColumnDouble(tableColunaBaseSalario, 2);//Duas casas decimais
+		
 		Stage stage = (Stage) Main.getMainScene().getWindow();// Referencia para a janela com o Stage em partentes pois
 																// o Main é superclasse
-
 		// Deixar a parte debaixo na subjanela de Vendedor acompanhando a parte
 		// inferior da tela
 		tableViewVendedor.prefHeightProperty().bind(stage.heightProperty());
@@ -104,7 +120,6 @@ public class VendedorListaController implements Initializable, DadoChangeListene
 		//Chama os metodos
 		iniciaEdicaoButtons();// Acrescenta um botao de edição em cada linha da tabela e vai abrir o formulario de edição usando o criaFormDialogo
 		iniciaRemoveButtons();
-	
 	}
 
 	private void criaFormDialogo(Vendedor obj, String absolutoNome, Stage parentStage) {// Informando quem criou
