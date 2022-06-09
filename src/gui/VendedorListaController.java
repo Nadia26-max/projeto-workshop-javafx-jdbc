@@ -1,5 +1,6 @@
 package gui;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.Date;
 import java.util.List;
@@ -16,7 +17,9 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
@@ -24,6 +27,8 @@ import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.Pane;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import model.entities.Vendedor;
 import model.services.VendedorService;
@@ -124,32 +129,32 @@ public class VendedorListaController implements Initializable, DadoChangeListene
 
 	private void criaFormDialogo(Vendedor obj, String absolutoNome, Stage parentStage) {// Informando quem criou
 																							// essa janela de dialogo
-//		try {
-//			FXMLLoader loader = new FXMLLoader(getClass().getResource(absolutoNome));
-//			Pane painel = loader.load();
-//
-//			// Referência para a tela de formulario no Controller
-//			VendedorFormController dfc = loader.getController();
-//			dfc.setVendedor(obj);
-//			dfc.setVendedorService(new VendedorService());// Injeção de depencia para funcionar o servico de
-//																	// salvar os dados no bd com o botao
-//			dfc.subscribeDadoChangeListener(this);// executa o objeto do VendedorListController, dispara o evento e
-//													// executa o metodo onDataChanged
-//			dfc.atualizaFormDados();
-//
-//			// Janela do formulario para preencher um novo Vendedor
-//			// Colocando outro Stage - Um palco na frente de outro
-//			Stage dialogoStage = new Stage();
-//			dialogoStage.setTitle("Entre com os dados de Vendedor:");// Título para a janela
-//			dialogoStage.setScene(new Scene(painel));// Novo Stage, nova cena
-//			dialogoStage.setResizable(false);// Informa se a janela pode ou nao ser redimensionada (no caso, nao)
-//			dialogoStage.initOwner(parentStage);// Entra o pai dessa janela
-//			dialogoStage.initModality(Modality.WINDOW_MODAL);// Se a janela será modal ou terá outro comportamento -
-//																// Modal (tem que fechar esta para acessar a anterior)
-//			dialogoStage.showAndWait();
-//		} catch (IOException e) {
-//			Alertas.showAlert("IOException", "Erro ao carregar a view", e.getMessage(), AlertType.ERROR);
-//		}
+		try {
+			FXMLLoader loader = new FXMLLoader(getClass().getResource(absolutoNome));
+			Pane painel = loader.load();
+
+			// Referência para a tela de formulario no Controller
+			VendedorFormController dfc = loader.getController();
+			dfc.setVendedor(obj);
+			dfc.setVendedorService(new VendedorService());// Injeção de depencia para funcionar o servico de
+																	// salvar os dados no bd com o botao
+			dfc.subscribeDadoChangeListener(this);// executa o objeto do VendedorListController, dispara o evento e
+													// executa o metodo onDataChanged
+			dfc.atualizaFormDados();
+
+			// Janela do formulario para preencher um novo Vendedor
+			// Colocando outro Stage - Um palco na frente de outro
+			Stage dialogoStage = new Stage();
+			dialogoStage.setTitle("Entre com os dados de Vendedor:");// Título para a janela
+			dialogoStage.setScene(new Scene(painel));// Novo Stage, nova cena
+			dialogoStage.setResizable(false);// Informa se a janela pode ou nao ser redimensionada (no caso, nao)
+			dialogoStage.initOwner(parentStage);// Entra o pai dessa janela
+			dialogoStage.initModality(Modality.WINDOW_MODAL);// Se a janela será modal ou terá outro comportamento -
+																// Modal (tem que fechar esta para acessar a anterior)
+			dialogoStage.showAndWait();
+		} catch (IOException e) {
+			Alertas.showAlert("IOException", "Erro ao carregar a view", e.getMessage(), AlertType.ERROR);
+		}
 	}
 
 	@Override
