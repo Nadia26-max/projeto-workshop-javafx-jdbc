@@ -135,7 +135,7 @@ public class VendedorDaoJDBC implements VendedorDao {
 			if (rs.next()) {
 				Departamento dep = instanciandoDepartamento(rs);
 
-				Vendedor ven = instanciandoDepartamento(rs, dep);
+				Vendedor ven = instanciandoVendedor(rs, dep);
 				return ven;
 			}
 			return null;
@@ -149,12 +149,12 @@ public class VendedorDaoJDBC implements VendedorDao {
 		}
 	}
 
-	private Vendedor instanciandoDepartamento(ResultSet rs, Departamento dep) throws SQLException {
+	private Vendedor instanciandoVendedor(ResultSet rs, Departamento dep) throws SQLException {
 		Vendedor ven = new Vendedor();
 		ven.setId(rs.getInt("Id"));// Nome da coluna no bd
 		ven.setNome(rs.getString("Name"));
 		ven.setEmail(rs.getString("Email"));
-		ven.setNascimento(rs.getDate("BirthDate"));
+		ven.setNascimento(new java.util.Date(rs.getTimestamp("BirthDate").getTime()));
 		ven.setBaseSalario(rs.getDouble("BaseSalary"));
 		ven.setDepartament(dep);// Referenciando o Departmamento
 		return ven;
@@ -203,7 +203,7 @@ public class VendedorDaoJDBC implements VendedorDao {
 					mapa.put(rs.getInt("DepartmentId"), dep);
 				}
 				// Apontando para o departamento existente ou o novo que instanciei
-				Vendedor ven = instanciandoDepartamento(rs, dep);
+				Vendedor ven = instanciandoVendedor(rs, dep);
 				lista.add(ven);
 			}
 			return lista;
@@ -254,7 +254,7 @@ public class VendedorDaoJDBC implements VendedorDao {
 					mapa.put(rs.getInt("DepartmentId"), dep);
 				}
 				// Apontando para o departamento existente ou o novo que instanciei
-				Vendedor ven = instanciandoDepartamento(rs, dep);
+				Vendedor ven = instanciandoVendedor(rs, dep);
 				lista.add(ven);
 			}
 			return lista;

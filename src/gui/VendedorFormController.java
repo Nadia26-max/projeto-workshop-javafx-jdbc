@@ -1,8 +1,11 @@
 package gui;
 
 import java.net.URL;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.Set;
@@ -16,6 +19,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
+import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import model.entities.Vendedor;
@@ -39,7 +43,25 @@ public class VendedorFormController implements Initializable{
 	private TextField txtNome;
 	
 	@FXML
+	private TextField txtEmail;
+	
+	@FXML
+	private DatePicker dpNascimento;
+	
+	@FXML
+	private TextField txtBaseSalario;
+	
+	@FXML
 	private Label labelErroNome;//Mensagem de erro caso tenha alguma coisa errada no preenchimento do nome
+	
+	@FXML
+	private Label labelErroEmail;
+	
+	@FXML
+	private Label labelErroNascimento;
+	
+	@FXML
+	private Label labelErroBaseSalario;
 	
 	@FXML
 	private Button btSalvar;
@@ -128,10 +150,13 @@ public class VendedorFormController implements Initializable{
 	
 	private void inicializandoNodes() {
 		Constraints.setTextFieldInteger(txtId);//Só aceitará numero inteiro
-		Constraints.setTextFieldMaxLength(txtNome, 30);//Só aceitará até 30 caracteres
+		Constraints.setTextFieldMaxLength(txtNome, 50);//Só aceitará até 30 caracteres
+		Constraints.setTextFieldMaxLength(txtEmail, 30);
+		Uteis.formatDatePicker(dpNascimento, "dd/MM/yyyy");
+		Constraints.setTextFieldDouble(txtBaseSalario);
 	}
 	
-	//Populando as caixas do formulario de fato com os dados que estao no objeto entidade
+	//Populando as caixas do formulario de fato com os dados que estao no objeto entidade - Pega os os objetos e joga na caixinha do formulario
 	public void atualizaFormDados() {
 		
 		if(entidade == null) {//Verificando se a entidade está nula
@@ -139,6 +164,15 @@ public class VendedorFormController implements Initializable{
 		}
 		txtId.setText(String.valueOf(entidade.getId()));//Convertendo id da entidade (inteiro) para String
 		txtNome.setText(entidade.getNome());
+		txtEmail.setText(entidade.getEmail());
+		
+		if(entidade.getNascimento() != null) {
+		//Criando uma data local
+		dpNascimento.setValue(LocalDate.ofInstant(entidade.getNascimento().toInstant(), ZoneId.systemDefault()));//Pega o horario da maquina de usuario
+		}
+		
+		Locale.setDefault(Locale.UK);
+		txtBaseSalario.setText(String.format("%.2f", entidade.getBaseSalario()));
 	}
 	
 	private void setErroMensagens(Map<String , String> erros) {//Carrega os erros e preenche esses erros na caixinha de texto
